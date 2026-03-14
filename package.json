@@ -2,12 +2,20 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": "pnpm run lint"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "prepare": "husky install"
   },
   "dependencies": {
     "next": "16.1.6",
@@ -16,24 +24,28 @@
     "react-dom": "19.2.3"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "babel-plugin-react-compiler": "1.0.0",
-    "oxfmt": "^0.40.0",
-    "oxlint": "^1.55.0",
-    "typescript": "^5",
-    "storybook": "^10.2.19",
-    "@storybook/nextjs-vite": "^10.2.19",
     "@chromatic-com/storybook": "^5.0.1",
-    "@storybook/addon-vitest": "^10.2.19",
     "@storybook/addon-a11y": "^10.2.19",
     "@storybook/addon-docs": "^10.2.19",
     "@storybook/addon-onboarding": "^10.2.19",
-    "vite": "^8.0.0",
-    "vitest": "^4.1.0",
-    "playwright": "^1.58.2",
+    "@storybook/addon-vitest": "^10.2.19",
+    "@storybook/nextjs-vite": "^10.2.19",
+    "@trivago/prettier-plugin-sort-imports": "^6.0.2",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
     "@vitest/browser-playwright": "^4.1.0",
-    "@vitest/coverage-v8": "^4.1.0"
+    "@vitest/coverage-v8": "^4.1.0",
+    "babel-plugin-react-compiler": "1.0.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^16.4.0",
+    "oxfmt": "^0.40.0",
+    "oxlint": "^1.55.0",
+    "playwright": "^1.58.2",
+    "prettier": "^3.8.1",
+    "storybook": "^10.2.19",
+    "typescript": "^5",
+    "vite": "^8.0.0",
+    "vitest": "^4.1.0"
   }
 }
