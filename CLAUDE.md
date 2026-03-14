@@ -43,8 +43,12 @@ Hook の stdin から取得。`tool_name` と `tool_input` の一部フィール
 - DB: Supabase (PostgreSQL), Drizzle ORM
 - Validation: zod
 - Lint / Format: oxlint, oxfmt
+- Git hooks: husky
 - Test: Vitest, Playwright
 - UI開発: Storybook
+- 日付操作: date-fns
+- DB マイグレーション: drizzle-kit
+- CI/CD: GitHub Actions
 - Infra: Docker
 
 ## 現状
