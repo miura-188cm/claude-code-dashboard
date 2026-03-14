@@ -5,10 +5,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "next": "16.1.6",
+    "next-auth": "5.0.0-beta.30",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },
@@ -19,6 +22,18 @@
     "babel-plugin-react-compiler": "1.0.0",
     "oxfmt": "^0.40.0",
     "oxlint": "^1.55.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "storybook": "^10.2.19",
+    "@storybook/nextjs-vite": "^10.2.19",
+    "@chromatic-com/storybook": "^5.0.1",
+    "@storybook/addon-vitest": "^10.2.19",
+    "@storybook/addon-a11y": "^10.2.19",
+    "@storybook/addon-docs": "^10.2.19",
+    "@storybook/addon-onboarding": "^10.2.19",
+    "vite": "^8.0.0",
+    "vitest": "^4.1.0",
+    "playwright": "^1.58.2",
+    "@vitest/browser-playwright": "^4.1.0",
+    "@vitest/coverage-v8": "^4.1.0"
   }
 }
