@@ -2,9 +2,6 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
-  "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": "pnpm run lint"
-  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -53,5 +50,8 @@
     "typescript": "^5",
     "vite": "^8.0.0",
     "vitest": "^4.1.0"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": "pnpm run lint"
   }
 }

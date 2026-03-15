@@ -14,13 +14,13 @@
 }
 ```
 
-| フィールド | 型 | 説明 |
-|---|---|---|
-| `session_id` | string | セッション識別子 |
+| フィールド        | 型     | 説明                                  |
+| ----------------- | ------ | ------------------------------------- |
+| `session_id`      | string | セッション識別子                      |
 | `transcript_path` | string | セッション JSONL ファイルへの絶対パス |
-| `cwd` | string | 発火時の作業ディレクトリ |
-| `permission_mode` | string | 現在のパーミッションモード |
-| `hook_event_name` | string | 発火した Hook イベント名 |
+| `cwd`             | string | 発火時の作業ディレクトリ              |
+| `permission_mode` | string | 現在のパーミッションモード            |
+| `hook_event_name` | string | 発火した Hook イベント名              |
 
 ## PostToolUse
 
@@ -47,14 +47,14 @@ Claude がツールを使い終わった直後に発火。
 }
 ```
 
-| フィールド | 型 | 説明 |
-|---|---|---|
-| `tool_name` | string | 実行されたツール名（`Skill`, `Agent`, `mcp__*` 等） |
-| `tool_input` | object | ツールに渡された入力パラメータ |
-| `tool_response` | object | ツールの実行結果 |
-| `tool_use_id` | string | ツール実行の一意識別子 |
-| `agent_id` | string? | sub agent 内で発火した場合のみ存在 |
-| `agent_type` | string? | sub agent 内で発火した場合のみ存在 |
+| フィールド      | 型      | 説明                                                |
+| --------------- | ------- | --------------------------------------------------- |
+| `tool_name`     | string  | 実行されたツール名（`Skill`, `Agent`, `mcp__*` 等） |
+| `tool_input`    | object  | ツールに渡された入力パラメータ                      |
+| `tool_response` | object  | ツールの実行結果                                    |
+| `tool_use_id`   | string  | ツール実行の一意識別子                              |
+| `agent_id`      | string? | sub agent 内で発火した場合のみ存在                  |
+| `agent_type`    | string? | sub agent 内で発火した場合のみ存在                  |
 
 ### tool_name ごとの tool_input 例
 
@@ -67,7 +67,10 @@ Claude がツールを使い終わった直後に発火。
 #### Sub Agents
 
 ```json
-{ "tool_name": "Agent", "tool_input": { "subagent_type": "Explore", "description": "型の使用箇所を調査" } }
+{
+  "tool_name": "Agent",
+  "tool_input": { "subagent_type": "Explore", "description": "型の使用箇所を調査" }
+}
 ```
 
 #### Teams
@@ -102,9 +105,9 @@ Claude がツールを使い終わった直後に発火。
 }
 ```
 
-| フィールド | 型 | 説明 |
-|---|---|---|
-| `prompt` | string | ユーザーが入力したテキスト |
+| フィールド | 型     | 説明                       |
+| ---------- | ------ | -------------------------- |
+| `prompt`   | string | ユーザーが入力したテキスト |
 
 ## Stop
 
@@ -122,10 +125,10 @@ Claude が応答を書き終わった瞬間に発火。
 }
 ```
 
-| フィールド | 型 | 説明 |
-|---|---|---|
-| `stop_hook_active` | boolean | 無限ループ防止用フラグ |
-| `last_assistant_message` | string | Claude の最後の応答テキスト |
+| フィールド               | 型      | 説明                        |
+| ------------------------ | ------- | --------------------------- |
+| `stop_hook_active`       | boolean | 無限ループ防止用フラグ      |
+| `last_assistant_message` | string  | Claude の最後の応答テキスト |
 
 ## SessionEnd
 
@@ -142,14 +145,14 @@ Claude が応答を書き終わった瞬間に発火。
 }
 ```
 
-| フィールド | 型 | 説明 |
-|---|---|---|
-| `reason` | string | 終了理由。`"clear"`, `"logout"`, `"prompt_input_exit"`, `"bypass_permissions_disabled"`, `"other"` |
+| フィールド | 型     | 説明                                                                                               |
+| ---------- | ------ | -------------------------------------------------------------------------------------------------- |
+| `reason`   | string | 終了理由。`"clear"`, `"logout"`, `"prompt_input_exit"`, `"bypass_permissions_disabled"`, `"other"` |
 
 ## stdin に含まれないデータ
 
-| データ | 取得方法 |
-|---|---|
-| **token usage** (input/output/cache) | `transcript_path` の JSONL 内 `message.usage` を読む |
-| **セッション長** (duration) | Hook スクリプト内で `date` を使うか、JSONL のタイムスタンプ差分で計算 |
-| **timestamp** | Hook スクリプト内で `date` コマンドで自前生成 |
+| データ                               | 取得方法                                                              |
+| ------------------------------------ | --------------------------------------------------------------------- |
+| **token usage** (input/output/cache) | `transcript_path` の JSONL 内 `message.usage` を読む                  |
+| **セッション長** (duration)          | Hook スクリプト内で `date` を使うか、JSONL のタイムスタンプ差分で計算 |
+| **timestamp**                        | Hook スクリプト内で `date` コマンドで自前生成                         |

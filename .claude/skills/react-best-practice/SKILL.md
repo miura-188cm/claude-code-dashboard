@@ -13,10 +13,12 @@ user-invocable: true
 ## 1. コンポーネント設計
 
 ### Server Components をデフォルトにする
+
 - Next.js App Router では **Server Component がデフォルト**。クライアント側の機能が必要な場合のみ `"use client"` を付与する。
 - `"use client"` が必要なケース: `useState`, `useEffect`, `useRef`, イベントハンドラ (`onClick` 等), ブラウザ API, yamada-ui のインタラクティブコンポーネント。
 
 ### Client Component の境界を最小化する
+
 - ページ全体を `"use client"` にせず、インタラクティブな部分だけを小さな Client Component に切り出す。
 
 ```tsx
@@ -36,10 +38,12 @@ export default async function DashboardPage() {
 ```
 
 ### 単一責任の原則
+
 - 1 コンポーネント = 1 つの責務。表示・ロジック・データ取得を適切に分離する。
 - 200 行を超えるコンポーネントは分割を検討する。
 
 ### Props の設計
+
 - Props の型は明示的に定義する。`any` は禁止。
 - children を活用した合成パターンを優先し、prop drilling を避ける。
 - boolean props は肯定形にする（`isDisabled` ではなく `disabled`、ただし yamada-ui の API に従う場合は除く）。
@@ -65,12 +69,14 @@ type ChartCardProps = {
 ## 2. 状態管理
 
 ### 状態の置き場所を正しく選ぶ
+
 1. **URL (searchParams)** — フィルタ、ページネーション、ソート順など共有可能な状態
 2. **Server State** — DB / API からのデータ（Server Component で fetch）
 3. **Local State (`useState`)** — UI のトグル、フォーム入力など
 4. **Context** — テーマ、認証情報など複数コンポーネントで共有する状態
 
 ### 不要な状態を作らない
+
 - 既存の state や props から**計算できる値**は state にしない。
 
 ```tsx
@@ -85,6 +91,7 @@ const count = items.length; // 派生値
 ```
 
 ### `useReducer` の活用
+
 - 関連する複数の state がある場合は `useReducer` を検討する。
 
 ---
@@ -92,28 +99,33 @@ const count = items.length; // 派生値
 ## 3. パフォーマンス最適化
 
 ### 不要な再レンダリングを防ぐ
+
 useMemo,useCallback は基本的に不要です．react compiler がついています．
+
 - コンポーネントの分割で解決できないか先に検討する。
 
 ### リストレンダリング
+
 - `key` には安定した一意の ID を使う。配列の index は**並べ替え・追加・削除がない場合のみ**許容。
 
 ```tsx
 // Good
-{users.map((user) => (
-  <UserCard key={user.id} user={user} />
-))}
+{
+  users.map((user) => <UserCard key={user.id} user={user} />);
+}
 
 // Bad
-{users.map((user, index) => (
-  <UserCard key={index} user={user} />
-))}
+{
+  users.map((user, index) => <UserCard key={index} user={user} />);
+}
 ```
 
 ### 画像の最適化
+
 - `next/image` を使用する。`width`, `height` を必ず指定する。
 
 ### 動的インポート
+
 - 初期表示に不要な重いコンポーネントは `next/dynamic` で遅延ロードする。
 
 ```tsx
@@ -129,6 +141,7 @@ const HeavyChart = dynamic(() => import("./heavy-chart"), {
 ## 4. データ取得パターン (Next.js App Router)
 
 ### Server Component でのデータ取得
+
 - `fetch` や DB クエリは Server Component 内で直接行う。
 - `async/await` をそのまま使える。
 
@@ -141,6 +154,7 @@ export default async function DashboardPage() {
 ```
 
 ### Server Actions
+
 - フォーム送信やミューテーションには Server Actions を使う。
 - `"use server"` ディレクティブを関数またはファイルの先頭に記述する。
 - 入力値は必ず zod でバリデーションする。
@@ -166,6 +180,7 @@ export async function createItem(formData: FormData) {
 ```
 
 ### loading.tsx / error.tsx
+
 - 各ルートセグメントに `loading.tsx` と `error.tsx` を配置して、Suspense / Error Boundary を活用する。
 
 ---
@@ -173,6 +188,7 @@ export async function createItem(formData: FormData) {
 ## 5. Hooks のルール
 
 ### カスタム Hooks
+
 - 再利用するロジックは `use` プレフィックス付きのカスタム Hook に切り出す。
 - カスタム Hook は **1 つの関心事** に集中させる。
 
@@ -190,6 +206,7 @@ function useSessionStats(userId: string) {
 ```
 
 ### useEffect の注意点
+
 - **useEffect はイベントハンドラで代替できないか**まず検討する。
 - 依存配列は正確に記述する。ESLint の `exhaustive-deps` ルールに従う。
 - クリーンアップ関数を忘れない（タイマー、サブスクリプション等）。
@@ -199,12 +216,17 @@ function useSessionStats(userId: string) {
 ## 6. TypeScript との統合
 
 ### 型の付け方
+
 - コンポーネントの型は関数の引数に直接記述する。`React.FC` は使わない。
 
 ```tsx
 // Good
 function UserCard({ name, score }: { name: string; score: number }) {
-  return <div>{name}: {score}</div>;
+  return (
+    <div>
+      {name}: {score}
+    </div>
+  );
 }
 
 // Good (型が複雑な場合)
@@ -215,15 +237,21 @@ type UserCardProps = {
 };
 
 function UserCard({ name, score, onSelect }: UserCardProps) {
-  return <div>{name}: {score}</div>;
+  return (
+    <div>
+      {name}: {score}
+    </div>
+  );
 }
 ```
 
 ### イベントハンドラの型
+
 - `React.MouseEvent<HTMLButtonElement>` など具体的な型を使う。
 - インラインハンドラなら型推論に任せて OK。
 
 ### as / ! の使用禁止
+
 - `as` による型アサーションや `!` (non-null assertion) は原則禁止。型ガードや zod でのパースで安全に絞り込む。
 
 ---
@@ -265,6 +293,7 @@ export default function Error({
 ```
 
 ### 命名規則
+
 - ファイル名: **kebab-case** (`stats-card.tsx`)
 - コンポーネント名: **PascalCase** (`StatsCard`)
 - Hooks: **camelCase** with `use` prefix (`useSessionStats`)

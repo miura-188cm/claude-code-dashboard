@@ -10,12 +10,12 @@ Claude Code の Hooks 機能を使い、会話中のイベントを自動で API
 
 ## 使用する Hook イベント
 
-| Hook | 発火タイミング | 送るデータ | 目的 |
-|---|---|---|---|
-| `PostToolUse` | Claude がツールを使い終わった直後 | `tool_name`, `tool_input` | Skills / Sub Agents / Teams / MCP の利用記録 |
-| `UserPromptSubmit` | ユーザーがメッセージを送信した瞬間 | `session_id`, `timestamp` | メッセージ数のカウント |
-| `Stop` | Claude が応答を書き終わった瞬間 | `usage` (token数) | Token 使用量（input/output/cache） |
-| `SessionEnd` | `/clear`、`exit`、ウィンドウを閉じた時 | `session_id`, `duration_seconds` | セッションの長さ |
+| Hook               | 発火タイミング                         | 送るデータ                       | 目的                                         |
+| ------------------ | -------------------------------------- | -------------------------------- | -------------------------------------------- |
+| `PostToolUse`      | Claude がツールを使い終わった直後      | `tool_name`, `tool_input`        | Skills / Sub Agents / Teams / MCP の利用記録 |
+| `UserPromptSubmit` | ユーザーがメッセージを送信した瞬間     | `session_id`, `timestamp`        | メッセージ数のカウント                       |
+| `Stop`             | Claude が応答を書き終わった瞬間        | `usage` (token数)                | Token 使用量（input/output/cache）           |
+| `SessionEnd`       | `/clear`、`exit`、ウィンドウを閉じた時 | `session_id`, `duration_seconds` | セッションの長さ                             |
 
 ## settings.json の設定例
 
@@ -25,33 +25,25 @@ Claude Code の Hooks 機能を使い、会話中のイベントを自動で API
     "PostToolUse": [
       {
         "matcher": "Skill|Agent|TeamCreate|SendMessage|TeamDelete|mcp__.*",
-        "hooks": [
-          { "type": "http", "url": "https://<your-api>/post-tool-use", "async": true }
-        ]
+        "hooks": [{ "type": "http", "url": "https://<your-api>/post-tool-use", "async": true }]
       }
     ],
     "UserPromptSubmit": [
       {
         "matcher": "*",
-        "hooks": [
-          { "type": "http", "url": "https://<your-api>/user-prompt-submit", "async": true }
-        ]
+        "hooks": [{ "type": "http", "url": "https://<your-api>/user-prompt-submit", "async": true }]
       }
     ],
     "Stop": [
       {
         "matcher": "*",
-        "hooks": [
-          { "type": "http", "url": "https://<your-api>/stop", "async": true }
-        ]
+        "hooks": [{ "type": "http", "url": "https://<your-api>/stop", "async": true }]
       }
     ],
     "SessionEnd": [
       {
         "matcher": "*",
-        "hooks": [
-          { "type": "http", "url": "https://<your-api>/session-end", "async": true }
-        ]
+        "hooks": [{ "type": "http", "url": "https://<your-api>/session-end", "async": true }]
       }
     ]
   }
@@ -86,7 +78,10 @@ Claude:「どういたしまして」             ← Stop 発火 → POST (toke
 ### Sub Agents
 
 ```json
-{ "tool_name": "Agent", "tool_input": { "subagent_type": "Explore", "description": "型の使用箇所を調査" } }
+{
+  "tool_name": "Agent",
+  "tool_input": { "subagent_type": "Explore", "description": "型の使用箇所を調査" }
+}
 ```
 
 ### Teams
@@ -117,8 +112,8 @@ Claude:「どういたしまして」             ← Stop 発火 → POST (toke
 
 API 側でユーザー・セッションを識別するために、以下を共通で送る：
 
-| フィールド | 取得元 | 用途 |
-|---|---|---|
-| `session_id` | stdin の JSON | セッション識別 |
-| `timestamp` | stdin の JSON or 自前生成 | 時系列分析 |
-| `user_id` | 環境変数 or hostname | ユーザー識別・ランキング |
+| フィールド   | 取得元                    | 用途                     |
+| ------------ | ------------------------- | ------------------------ |
+| `session_id` | stdin の JSON             | セッション識別           |
+| `timestamp`  | stdin の JSON or 自前生成 | 時系列分析               |
+| `user_id`    | 環境変数 or hostname      | ユーザー識別・ランキング |
