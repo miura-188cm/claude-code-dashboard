@@ -1,0 +1,33 @@
+name: 🔧Build
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Build
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+          # Provide a dummy value so prisma/client generation doesn't complain
+          DATABASE_URL: postgresql://user:pass@localhost:5432/db
+        run: pnpm run build
